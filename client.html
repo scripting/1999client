@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>1999.io client example</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="http://fargo.io/code/jquery-1.9.1.min.js"></script>
+		<link href="http://fargo.io/code/ubuntuFont.css" rel="stylesheet" type="text/css">
+		<link href="http://fargo.io/code/bootstrap.css" rel="stylesheet">
+		<script src="http://fargo.io/code/bootstrap.min.js"></script>
+		<script src="http://fargo.io/code/websockets/code.js"></script>
+		<link href="http://fargo.io/code/websockets/styles.css" rel="stylesheet" type="text/css">
+		</head>
+	<body>
+		<div class="divPageBody">
+			<h1>WebSocket client for 1999.io</h1>
+			<p>This app hooks up with the 1999.io server using WebSockets. Every time a message is created or updated, the socket returns with the content of that message.</p> 
+			<p>The sockets time out after approximately 60 seconds. When that happens, we fire up another WebSocket call. And, if a call doesn't return after 75 seconds, we start another call, assuming we missed the timeout message from the server.</p>
+			<p>Here's some real-time data about the server.</p>
+			<p>When last call initiatiated: <span id="idWhenCallInitiated"></span> secs ago.
+			<p>Number of items in myChatlogCopy: <span id="idItemsInChatLog"></span>.
+			<div class="divResultsFromCall" id="idResultsFromCall">
+				<p>How long the last call took: <span id="spSecsLastCall">0</span> secs.
+				<p>The text returned from the last call:</p>
+				<pre id="idWebSocketResult">
+					</pre>
+				</div>
+			<p id="idWebSocketTime"></p>
+			</div>
+		<script>
+			$(document).ready (function () {
+				startup ();
+				});
+			</script>
+		</body>
+	</html>
