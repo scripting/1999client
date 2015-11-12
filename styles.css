@@ -19,3 +19,7 @@ pre {
 .divResultsFromCall {
 	display: none;
 	}
+.divVersionNumber {
+	font-size: 12px;
+	padding: 5px;
+	}

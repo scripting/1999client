@@ -1,4 +1,4 @@
-var version = 0.40, productName = "1999client";
+var myVersion = 0.41, myProductName = "1999client";
 var urlMySocket = "ws://node.1999.io:5389/";
 var urlHttpServer = "http://node.1999.io:1999/";
 var nameChatLog = "braintrust";
@@ -79,12 +79,19 @@ function readHttpFile (url, callback, timeoutInMilliseconds, headers) {
 	}
 function callSocket (s, callback) {
 	var mySocket = new WebSocket (urlMySocket); 
+	mySocket.flCalledCallback = false;
 	mySocket.onopen = function (evt) {
 		mySocket.send (s);
 		};
 	mySocket.onmessage = function (evt) {
 		callback (evt.data);
+		mySocket.flCalledCallback = true;
 		mySocket.close ();
+		};
+	mySocket.onerror = function (evt) {
+		if (!mySocket.flCalledCallback) {
+			callback (undefined);
+			}
 		};
 	}
 function getChatLog (nameChatLog, callback) { 
@@ -127,8 +134,8 @@ function watchForChange (urlToWatch, callback) {
 						s = stringDelete (s, 1, updatekey.length);
 						receivedChatItem (JSON.parse (s));
 						}
+					$("#idWebSocketResult").text (s);
 					}
-				$("#idWebSocketResult").text (s);
 				$("#spSecsLastCall").text (secondsSince (now));
 				$("#idResultsFromCall").css ("display", "block");
 				delete pendingPolls [urlToWatch];
@@ -151,6 +158,7 @@ function everySecond () {
 	}
 function startup () {
 	console.log ("startup");
+	$("#idVersionNumber").html ("v" + myVersion);
 	getChatLog (nameChatLog, function (myChatLog, myMetadata) {
 		myChatlogCopy = myChatLog;
 		self.setInterval (everySecond, 1000); 
