@@ -1,7 +1,7 @@
-var myVersion = 0.41, myProductName = "1999client";
+var myVersion = 0.42, myProductName = "1999client";
 var urlMySocket = "ws://node.1999.io:5389/";
 var urlHttpServer = "http://node.1999.io:1999/";
-var nameChatLog = "braintrust";
+var nameChatLog = "scripting";
 var ctSecondsTimeout = 75;
 var myChatlogCopy = new Array ();
 var pendingPolls = new Object ();
@@ -159,6 +159,7 @@ function everySecond () {
 function startup () {
 	console.log ("startup");
 	$("#idVersionNumber").html ("v" + myVersion);
+	$("#idNameChatLog").html (nameChatLog);
 	getChatLog (nameChatLog, function (myChatLog, myMetadata) {
 		myChatlogCopy = myChatLog;
 		self.setInterval (everySecond, 1000); 
