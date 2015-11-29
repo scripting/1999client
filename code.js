@@ -1,23 +1,17 @@
-var myVersion = 0.42, myProductName = "1999client";
+var myVersion = 0.44, myProductName = "1999client";
 var urlMySocket = "ws://node.1999.io:5389/";
 var urlHttpServer = "http://node.1999.io:1999/";
 var nameChatLog = "scripting";
-var ctSecondsTimeout = 75;
+var ctMessagesFromServer = 0;
+var whenStartup = new Date ();
+var whenLastMessageReceived = whenStartup;
 var myChatlogCopy = new Array ();
-var pendingPolls = new Object ();
-var whenLastCallInitiated;
+var mySocket = undefined;
 
 function secondsSince (when) { 
 	var now = new Date ();
 	when = new Date (when);
 	return ((now - when) / 1000);
-	}
-function stringLower (s) {
-	if (s === undefined) { //1/26/15 by DW
-		return ("");
-		}
-	s = s.toString (); //1/26/15 by DW
-	return (s.toLowerCase ());
 	}
 function beginsWith (s, possibleBeginning, flUnicase) { 
 	if (s === undefined) { //7/15/15 by DW
@@ -44,6 +38,13 @@ function beginsWith (s, possibleBeginning, flUnicase) {
 			}
 		}
 	return (true);
+	}
+function stringLower (s) {
+	if (s === undefined) { //1/26/15 by DW
+		return ("");
+		}
+	s = s.toString (); //1/26/15 by DW
+	return (s.toLowerCase ());
 	}
 function stringDelete (s, ix, ct) {
 	var start = ix - 1;
@@ -77,23 +78,6 @@ function readHttpFile (url, callback, timeoutInMilliseconds, headers) {
 		callback (undefined);
 		});
 	}
-function callSocket (s, callback) {
-	var mySocket = new WebSocket (urlMySocket); 
-	mySocket.flCalledCallback = false;
-	mySocket.onopen = function (evt) {
-		mySocket.send (s);
-		};
-	mySocket.onmessage = function (evt) {
-		callback (evt.data);
-		mySocket.flCalledCallback = true;
-		mySocket.close ();
-		};
-	mySocket.onerror = function (evt) {
-		if (!mySocket.flCalledCallback) {
-			callback (undefined);
-			}
-		};
-	}
 function getChatLog (nameChatLog, callback) { 
 	var apiUrl = urlHttpServer + "chatlog?chatLog=" + encodeURIComponent (nameChatLog), whenstart = new Date ();
 	readHttpFile (apiUrl, function (data) {
@@ -103,7 +87,7 @@ function getChatLog (nameChatLog, callback) {
 		callback (jstruct.chatLog, jstruct.metadata); //new metadata parameter -- 10/23/15 by DW
 		});
 	}
-function watchForChange (urlToWatch, callback) {
+function gotMessage (s) {
 	var now = new Date ();
 	function receivedChatItem (item) {
 		for (var i = 0; i < myChatlogCopy.length; i++) { //check for updates to items we already have
@@ -114,47 +98,48 @@ function watchForChange (urlToWatch, callback) {
 			}
 		myChatlogCopy [myChatlogCopy.length] = item; //it's a new item
 		}
-	for (var x in pendingPolls) {
-		if (pendingPolls [x] < now) {
-			console.log ("Expiring the pending poll for " + x);
-			delete pendingPolls [x]; 
+	console.log ("\ngotMessage");
+	console.log (s);
+	$("#idWebSocketResult").text (s);
+	$("#idCtMessagesFromServer").text (++ctMessagesFromServer);
+	$("#idSecsLastCall").text (secondsSince (whenLastMessageReceived));
+	whenLastMessageReceived = now;
+	if (s !== undefined) { //no error
+		var updatekey = "update\r";
+		if (beginsWith (s, updatekey)) { 
+			s = stringDelete (s, 1, updatekey.length);
+			receivedChatItem (JSON.parse (s));
 			}
+		$("#idWebSocketResult").text (s);
 		}
-	if (pendingPolls [urlToWatch] === undefined) {
-		pendingPolls [urlToWatch] = new Date (Number (now) + (ctSecondsTimeout * 1000));
-		console.log ("watchForChange: urlToWatch == " + urlToWatch);
-		whenLastCallInitiated = now;
-		try {
-			callSocket (urlToWatch, function (s) {
-				console.log ("The server returned " + s);
-				if (s !== undefined) { //no error
-					var updatekey = "update\r";
-					console.log ("watchForChange: " + stringNthField (s, "\r", 1) + " after " + secondsSince (now) + " secs.");
-					if (beginsWith (s, updatekey)) { //it's an update -- 12/18/14 by DW
-						s = stringDelete (s, 1, updatekey.length);
-						receivedChatItem (JSON.parse (s));
-						}
-					$("#idWebSocketResult").text (s);
-					}
-				$("#spSecsLastCall").text (secondsSince (now));
-				$("#idResultsFromCall").css ("display", "block");
-				delete pendingPolls [urlToWatch];
-				});
-			}
-		catch (err) {
-			console.log ("watchForChange: error calling the socket.");
-			delete pendingPolls [urlToWatch]; //so we'll try again
-			}
-		}
+	}
+function startConnection (s) {
+	mySocket = new WebSocket (urlMySocket); 
+	mySocket.onopen = function (evt) {
+		console.log ("mySocket is open.");
+		console.log ("sending: " + s);
+		mySocket.send (s);
+		};
+	mySocket.onmessage = function (evt) {
+		gotMessage (evt.data);
+		};
+	mySocket.onclose = function (evt) {
+		console.log ("mySocket was closed.");
+		mySocket = undefined;
+		};
+	mySocket.onerror = function (evt) {
+		console.log ("mySocket received an error");
+		};
 	}
 function everyMinute () {
 	var now = new Date ();
 	console.log ("\neveryMinute: " + now.toLocaleTimeString ());
 	}
 function everySecond () {
-	watchForChange ("chatlog:" + nameChatLog);
+	if (mySocket === undefined) { //try to open the connection
+		startConnection ("watch chatlog:" + nameChatLog);
+		}
 	$("#idItemsInChatLog").text (myChatlogCopy.length);
-	$("#idWhenCallInitiated").text (stringNthField (secondsSince (whenLastCallInitiated).toString (), ".", 1));
 	}
 function startup () {
 	console.log ("startup");
