@@ -1,12 +1,20 @@
 #### Client for 1999.io
 
-This is an example client app, running in a web page, for 1999.io that uses WebSockets.
+1999.io is my new liveblogging project. It's the software I use to edit <a href="http://scripting.com/">Scripting News</a>. When you reply to a post on my blog you are using 1999.io. 
 
-You can run it from this <a href="http://fargo.io/code/websockets3/test1999.html">web page</a> without having to download this project.. 
+The server is running <a href="https://github.com/scripting/nodeStorage">nodeStorage</a>, which is an open source project, that provides simple storage services for browser-based JavaScript apps, using Twitter-hosted identity.
 
-The server must be running <a href="https://github.com/scripting/nodeStorage">nodeStorage</a> v0.84 or greater. It's the first release with WebSockets support.
+nodeStorage has a WebSockets interface, which we use in this app to get a stream of updates from the server. 
 
-#### What you get
+I wrote a <a href="http://scripting.com/liveblog/users/davewiner/2015/11/30/0510.html">blog post</a> that explains why I provided this app, and an overview of how to test it. 
+
+#### It's a demo app
+
+When you run the <a href="http://fargo.io/code/websockets3/test1999.html">demo app</a>, you will get an update for each new post, comment, or edit to a post or comment on Scripting News. 
+
+It also maintains a JavaScript data structure which is a mirror of the most recent posts on my blog, as a JavaScript object. 
+
+#### Details
 
 Every time the server updates you get a message. 
 
