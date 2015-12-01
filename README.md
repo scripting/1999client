@@ -8,7 +8,9 @@ The server must be running <a href="https://github.com/scripting/nodeStorage">no
 
 #### What you get
 
-Every time the server updates you get a message. The first line of the message has the world update followed by a \\r. This makes it possible for other kinds of data to be returned at some time in the future.
+Every time the server updates you get a message. 
+
+The first line of the message has the world <i>update</i> followed by a \\r. This makes it possible for other kinds of data to be returned at some time in the future.
 
 Following the first line is a JSON structure containing all the information about a top-level message. 
 
