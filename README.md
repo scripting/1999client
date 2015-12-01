@@ -2,9 +2,9 @@
 
 1999.io is my new liveblogging project. It's the software I use to edit <a href="http://scripting.com/">Scripting News</a>. When you reply to a post on my blog you are using 1999.io. 
 
-The server is running <a href="https://github.com/scripting/nodeStorage">nodeStorage</a>, which is an open source project, that provides simple storage services for browser-based JavaScript apps, using Twitter-hosted identity.
+The server is running a recent version of <a href="https://github.com/scripting/nodeStorage">nodeStorage</a>. It provides simple storage services for browser-based JavaScript apps, using Twitter-hosted identity. 
 
-nodeStorage has a WebSockets interface, which we use in this app to get a stream of updates from the server. 
+nodeStorage has a <a href="http://www.websocket.org/aboutwebsocket.html">WebSockets</a> interface, which we use in this app to get a stream of updates from the server. 
 
 I wrote a <a href="http://scripting.com/liveblog/users/davewiner/2015/11/30/0510.html">blog post</a> that explains why I provided this app, and an overview of how to test it. 
 
