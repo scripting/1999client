@@ -156,6 +156,7 @@ function everySecond () {
 		startConnection ("watch chatlog:" + nameChatLog);
 		}
 	$("#idItemsInChatLog").text (myChatlogCopy.length);
+	$("#idSecsSinceLastUpdate").text (stringNthField (secondsSince (whenLastMessageReceived).toString (), ".", 1));
 	}
 function startup () {
 	console.log ("startup");
