@@ -10,3 +10,5 @@ The server must be running <a href="https://github.com/scripting/nodeStorage">no
 
 v0.44 -- rewritten to work with new WebSockets code in nodeStorage, not yet released. 
 
+v0.45 -- updated to use the new 1999.io server. 
+

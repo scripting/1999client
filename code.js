@@ -1,6 +1,6 @@
-var myVersion = 0.44, myProductName = "1999client";
-var urlMySocket = "ws://node.1999.io:5389/";
-var urlHttpServer = "http://node.1999.io:1999/";
+var myVersion = 0.45, myProductName = "1999client";
+var urlMySocket = "ws://node2.1999.io:5358/";
+var urlHttpServer = "http://node2.1999.io/";
 var nameChatLog = "scripting";
 var ctMessagesFromServer = 0;
 var whenStartup = new Date ();
@@ -12,6 +12,22 @@ function secondsSince (when) {
 	var now = new Date ();
 	when = new Date (when);
 	return ((now - when) / 1000);
+	}
+function jsonStringify (jstruct, flFixBreakage) { 
+	//Changes
+		//6/16/15; 10:43:25 AM by DW
+			//Andrew Shell reported an issue in the encoding of JSON that's solved by doing character replacement. 
+			//However, this is too big a change to make for all the code that calls this library routine, so we added a boolean flag, flFixBreakage.
+			//If this proves to be harmless, we'll change the default to true. 
+			//http://river4.smallpict.com/2015/06/16/jsonEncodingIssueSolved.html
+	if (flFixBreakage === undefined) {
+		flFixBreakage = false;
+		}
+	var s = JSON.stringify (jstruct, undefined, 4);
+	if (flFixBreakage) {
+		s = s.replace (/\u2028/g,'\\u2028').replace (/\u2029/g,'\\u2029');
+		}
+	return (s);
 	}
 function beginsWith (s, possibleBeginning, flUnicase) { 
 	if (s === undefined) { //7/15/15 by DW
