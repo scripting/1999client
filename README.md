@@ -8,11 +8,9 @@ nodeStorage has a <a href="http://www.websocket.org/aboutwebsocket.html">WebSock
 
 I wrote a <a href="http://scripting.com/liveblog/users/davewiner/2015/11/30/0510.html">blog post</a> that explains why I provided this app, and an overview of how to test it. 
 
-#### It's a demo app
+#### Demo app
 
-When you run the <a href="http://fargo.io/code/websockets3/test1999.html">demo app</a>, you will get an update for each new post, comment, or edit to a post or comment on Scripting News. 
-
-It also maintains a JavaScript data structure which is a mirror of the most recent posts on my blog, as a JavaScript object. 
+The <a href="http://fargo.io/code/websockets3/test1999.html">demo app</a> is a copy of client.html above. 
 
 #### Details
 
