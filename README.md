@@ -1,5 +1,7 @@
 #### Client for 1999.io
 
+<i>Important note: There's a more recent version of this app as part of the 1999-project repository. I'm leaving this here as documentation. DW 4/17/2016.</i>
+
 1999.io is my new liveblogging project. It's the software I use to edit <a href="http://scripting.com/">Scripting News</a>. When you reply to a post on my blog you are using 1999.io. 
 
 The server is running a recent version of <a href="https://github.com/scripting/nodeStorage">nodeStorage</a>. It provides simple storage services for browser-based JavaScript apps, using Twitter-hosted identity. 
